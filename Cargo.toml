@@ -1,0 +1,22 @@
+[package]
+name = "xet-swift"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "xet_sys"
+crate-type = ["cdylib"]
+
+[dependencies]
+data = { git = "https://github.com/huggingface/xet-core"}
+
+[dev-dependencies]
+tokio = { version = "1.47.1", features = ["full"] }
+
+[build-dependencies]
+cbindgen = "0.28.0"
+
+
+
+
+
