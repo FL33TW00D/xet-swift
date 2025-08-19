@@ -42,3 +42,46 @@ download_files(
 Therefore, for our Swift -> C -> Rust call chain, we simply need to expose the `download_files` function from Rust to C,
 and then the surrounding call chain can be implemented in Swift! One method! 
 
+
+```rust
+#[pyfunction]
+#[pyo3(signature = (files, endpoint, token_info, token_refresher, progress_updater), text_signature = "(files: List[PyXetDownloadInfo], endpoint: Optional[str], token_info: Optional[(str, int)], token_refresher: Optional[Callable[[], (str, int)]], progress_updater: Optional[List[Callable[[int], None]]]) -> List[str]")]
+pub fn download_files(
+    py: Python,
+    files: Vec<PyXetDownloadInfo>,
+    endpoint: Option<String>,
+    token_info: Option<(String, u64)>,
+    token_refresher: Option<Py<PyAny>>,
+    progress_updater: Option<Vec<Py<PyAny>>>,
+) -> PyResult<Vec<String>> {
+    let file_infos: Vec<_> = files.into_iter().map(<(XetFileInfo, DestinationPath)>::from).collect();
+    let refresher = token_refresher.map(WrappedTokenRefresher::from_func).transpose()?.map(Arc::new);
+    let updaters = progress_updater.map(try_parse_progress_updaters).transpose()?;
+
+    let x: u64 = rand::rng().random();
+
+    let file_names = file_infos.iter().take(3).map(|(_, p)| p).join(", ");
+
+    async_run(py, async move {
+        debug!(
+            "Download call {x:x}: (PID = {}) Downloading {} files {file_names}{}",
+            std::process::id(),
+            file_infos.len(),
+            if file_infos.len() > 3 { "..." } else { "." }
+        );
+
+        let out: Vec<String> =
+            data_client::download_async(file_infos, endpoint, token_info, refresher.map(|v| v as Arc<_>), updaters)
+                .await
+                .map_err(convert_data_processing_error)?;
+
+        debug!("Download call {x:x}: Completed.");
+
+        PyResult::Ok(out)
+    })
+}
+```
+We can see how the Rust -> Python call chain is set up, we will reimplement this exposing the same interface in C.
+
+
+

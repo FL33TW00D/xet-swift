@@ -9,9 +9,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 data = { git = "https://github.com/huggingface/xet-core"}
+tokio = { version = "1.47.1", features = ["full"] }
 
 [dev-dependencies]
-tokio = { version = "1.47.1", features = ["full"] }
 
 [build-dependencies]
 cbindgen = "0.28.0"

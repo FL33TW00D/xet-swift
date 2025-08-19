@@ -11,10 +11,10 @@ pub unsafe extern "C" fn xet_download(
     file_size: usize,
     output_path: *const c_char,
 ) -> *mut c_char {
-    let file_hash = CStr::from_ptr(file_hash).to_string_lossy().into_owned();
-    let output_path = CStr::from_ptr(output_path).to_string_lossy().into_owned();
+    let file_hash = unsafe { CStr::from_ptr(file_hash).to_string_lossy().into_owned() };
+    let output_path = unsafe { CStr::from_ptr(output_path).to_string_lossy().into_owned() };
 
-    let file_infos = vec![(XetFileInfo::new(file_hash, file_size as i64), output_path)];
+    let file_infos = vec![(XetFileInfo::new(file_hash, file_size as u64), output_path)];
 
     let runtime = tokio::runtime::Runtime::new().unwrap();
     let result = runtime.block_on(async {
