@@ -1,5 +1,5 @@
 import Foundation
-import CXet
+import XetSys 
 
 public struct XetDownloadInfo {
     public let destinationPath: String

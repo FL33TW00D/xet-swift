@@ -5,7 +5,7 @@ edition = "2024"
 
 [lib]
 name = "xet_sys"
-crate-type = ["cdylib"]
+crate-type = ["staticlib"]
 
 [dependencies]
 data = { git = "https://github.com/huggingface/xet-core"}
