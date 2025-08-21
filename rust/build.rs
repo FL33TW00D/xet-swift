@@ -1,9 +1,6 @@
 use std::env;
 
 fn main() {
-    println!("cargo:rustc-link-lib=framework=SystemConfiguration");
-    println!("cargo:rustc-link-lib=framework=CoreFoundation");
-
     let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
 
     std::fs::remove_dir_all("./bindings").ok();
