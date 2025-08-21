@@ -45,3 +45,11 @@ We then use `xcodebuild` to wrap up all our binaries into an XCFramework.
 ```
 
 You can see that when importing, we need to link to `SystemConfiguration` and `CoreFoundation`.
+
+## TODO
+
+- [ ] Test on iPhone
+- [ ] Create ergonomic wrapper that bridges between async task in Rust and async task in Swift
+- [ ] Integrate into `swift-transformers` Hub package
+
+
