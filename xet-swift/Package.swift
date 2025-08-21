@@ -9,16 +9,17 @@ let package = Package(
             targets: ["xet-swift"]),
     ],
     targets: [
-        .target(
-            name: "CXet",
-            linkerSettings: [
-                .linkedLibrary("xet_sys"),
-                .unsafeFlags(["-L../rust/target/release"])
-            ]
+        .binaryTarget(
+            name: "XetSys",
+            path: "./XetSys.xcframework"
         ),
         .target(
             name: "xet-swift",
-            dependencies: ["CXet"]
+            dependencies: ["XetSys"],
+            linkerSettings: [
+                .linkedFramework("SystemConfiguration"),
+                .linkedFramework("CoreFoundation"),
+            ]
         ),
         .testTarget(
             name: "xet-swiftTests",
