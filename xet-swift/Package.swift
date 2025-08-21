@@ -17,8 +17,8 @@ let package = Package(
             name: "xet-swift",
             dependencies: ["XetSys"],
             linkerSettings: [
-                .linkedFramework("SystemConfiguration"),
-                .linkedFramework("CoreFoundation"),
+                .linkedFramework("CoreFoundation", .when(platforms: [.macOS, .iOS])),
+                .linkedFramework("SystemConfiguration", .when(platforms: [.macOS, .iOS]))
             ]
         ),
         .testTarget(
