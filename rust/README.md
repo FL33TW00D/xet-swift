@@ -46,6 +46,9 @@ We then use `xcodebuild` to wrap up all our binaries into an XCFramework.
 
 You can see that when importing, we need to link to `SystemConfiguration` and `CoreFoundation`.
 
+The build process was greatly informed by [this blog post](https://rhonabwy.com/2023/02/10/creating-an-xcframework/) by
+Joseph Heck (who is now on the Swift team :)).
+
 ## TODO
 
 - [ ] Test on iPhone
