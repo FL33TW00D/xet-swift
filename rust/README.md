@@ -27,25 +27,6 @@ platforms.
 
 We then use `xcodebuild` to wrap up all our binaries into an XCFramework.
 
-## Some Gotchas
-
-```
-.binaryTarget(
-    name: "XetSys",
-    path: "./XetSys.xcframework"
-),
-.target(
-    name: "xet-swift",
-    dependencies: ["XetSys"],
-    linkerSettings: [
-        .linkedFramework("SystemConfiguration"),
-        .linkedFramework("CoreFoundation"),
-    ]
-)
-```
-
-You can see that when importing, we need to link to `SystemConfiguration` and `CoreFoundation`.
-
 ## TODO
 
 - [ ] Test on iPhone
