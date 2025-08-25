@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "xet-swift",
+    name: "XetSwift",
     products: [
         .library(
-            name: "xet-swift",
-            targets: ["xet-swift"]),
+            name: "XetSwift",
+            targets: ["XetSwift"]),
     ],
     targets: [
         .binaryTarget(
@@ -14,16 +14,16 @@ let package = Package(
             path: "./XetSys.xcframework"
         ),
         .target(
-            name: "xet-swift",
+            name: "XetSwift",
             dependencies: ["XetSys"],
             linkerSettings: [
-                .linkedFramework("SystemConfiguration"),
-                .linkedFramework("CoreFoundation"),
+                .linkedFramework("CoreFoundation", .when(platforms: [.macOS, .iOS])),
+                .linkedFramework("SystemConfiguration", .when(platforms: [.macOS, .iOS]))
             ]
         ),
         .testTarget(
-            name: "xet-swiftTests",
-            dependencies: ["xet-swift"]
+            name: "XetSwiftTests",
+            dependencies: ["XetSwift"]
         ),
     ]
 )
