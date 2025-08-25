@@ -70,23 +70,26 @@ pub unsafe extern "C" fn download_files(
         None
     };
 
-    let runtime = tokio::runtime::Runtime::new().unwrap();
+    let runtime = tokio::runtime::Runtime::new()
+        .map_err(|e| {
+            eprintln!("Failed to create Tokio runtime: {e}");
+            e
+        })
+        .unwrap();
     let result = runtime.block_on(async {
         data_client::download_async(file_infos, Some(r_endpoint), token, None, None).await
     });
 
     match result {
         Ok(files) => {
+            //TODO: only returns first file for now
             if let Some(first_file) = files.first() {
                 CString::new(first_file.clone()).unwrap().into_raw()
             } else {
                 std::ptr::null_mut()
             }
         }
-        Err(e) => {
-            println!("Error downloading files: {}", e);
-            std::ptr::null_mut()
-        }
+        Err(_) => std::ptr::null_mut(),
     }
 }
 
@@ -97,7 +100,6 @@ mod tests {
 
     #[test]
     fn test_cxet_file_download() {
-        println!("Starting test for CXetFileDownload...");
         let destination_path = CString::new("/Users/fleetwood/Code/xet-swift/testing").unwrap();
         let hash = CString::new("6aec39639a0a2d1ca966356b8c2b8426a484f80ff80731f44fa8482040713bdf")
             .unwrap();
@@ -127,8 +129,7 @@ mod tests {
         } else {
             let c_str = unsafe { CStr::from_ptr(result) };
             let file_path = c_str.to_string_lossy().into_owned();
-            println!("Downloaded file path: {}", file_path);
-            unsafe { CString::from_raw(result) }; // Free the memory allocated by CString::new
+            println!("Downloaded file to: {file_path}");
         }
     }
 }
